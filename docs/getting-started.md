@@ -1,49 +1,89 @@
----
-id: environment-setup
-title: Get Started with React Native
-hide_table_of_contents: true
----
+import React, { useState } from 'react';
+import { View, FlatList, Text, StyleSheet, SafeAreaView } from 'react-native';
+// 1. تم تعديل الـ import لإضافة Avatar
+import { ListItem, Avatar } from 'react-native-elements';
 
-import PlatformSupport from '@site/src/theme/PlatformSupport';
-import BoxLink from '@site/src/theme/BoxLink';
+// 2. تم تعديل البيانات لإضافة رابط صورة
+const MOCK_DESTINATIONS = [
+  {
+    id: '1',
+    name: 'Marrakech',
+    description: 'The Red City, famous for its souks.',
+    image: 'https://images.unsplash.com/photo-1559922080-601443425f38?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: '2',
+    name: 'Fes',
+    description: 'Home to the oldest university.',
+    image: 'https://images.unsplash.com/photo-1563810266067-c0e9fec3f804?q=80&w=1974&auto=format&fit=crop',
+  },
+  {
+    id: '3',
+    name: 'Chefchaouen',
+    description: 'The Blue Pearl of Morocco.',
+    image: 'https://images.unsplash.com/photo-1547990145-3d8b13f1604a?q=80&w=1966&auto=format&fit=crop',
+  },
+  {
+    id: '4',
+    name: 'Sahara Desert',
+    description: 'Experience the vast dunes.',
+    image: 'https://images.unsplash.com/photo-1519973800259-a3c393822185?q=80&w=2070&auto=format&fit=crop',
+  },
+];
 
-**React Native allows developers who know React to create native apps.** At the same time, native developers can use React Native to gain parity between native platforms by writing common features once.
+const DestinationsScreen = () => {
+  const [destinations, setDestinations] = useState(MOCK_DESTINATIONS);
 
-We believe that the best way to experience React Native is through a **Framework**, a toolbox with all the necessary APIs to let you build production ready apps.
+  const renderItem = ({ item }) => (
+    <ListItem bottomDivider containerStyle={styles.listItem}>
+      {/* 3. هذا هو المكون الجديد الذي يعرض الصورة */}
+      <Avatar
+        size="large"
+        rounded
+        source={{ uri: item.image }}
+      />
+      
+      <ListItem.Content>
+        <ListItem.Title style={styles.itemTitle}>{item.name}</ListItem.Title>
+        <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+      </ListItem.Content>
+      <ListItem.Chevron />
+    </ListItem>
+  );
 
-You can also use React Native without a Framework, however we’ve found that most developers benefit from using a React Native Framework like [Expo](https://expo.dev). Expo provides features like file-based routing, high-quality universal libraries, and the ability to write plugins that modify native code without having to manage native files.
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Explore Morocco</Text>
+        <FlatList
+          data={destinations}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
 
-<details>
-<summary>Can I use React Native without a Framework?</summary>
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    marginTop: 10,
+  },
+  itemTitle: {
+    fontWeight: 'bold',
+  },
+  listItem: {
+    paddingVertical: 15,
+  },
+});
 
-Yes. You can use React Native without a Framework. **However, if you’re building a new app with React Native, we recommend using a Framework.**
+export default DestinationsScreen;
 
-In short, you’ll be able to spend time writing your app instead of writing an entire Framework yourself in addition to your app.
-
-The React Native community has spent years refining approaches to navigation, accessing native APIs, dealing with native dependencies, and more. Most apps need these core features. A React Native Framework provides them from the start of your app.
-
-Without a Framework, you’ll either have to write your own solutions to implement core features, or you’ll have to piece together a collection of pre-existing libraries to create a skeleton of a Framework. This takes real work, both when starting your app, then later when maintaining it.
-
-If your app has unusual constraints that are not served well by a Framework, or you prefer to solve these problems yourself, you can make a React Native app without a Framework using Android Studio, Xcode. If you’re interested in this path, learn how to [set up your environment](set-up-your-environment) and how to [get started without a framework](getting-started-without-a-framework).
-
-</details>
-
-## Start a new React Native project with Expo
-
-<PlatformSupport platforms={['android', 'ios', 'tv', 'web']} />
-
-Expo is a production-grade React Native Framework. Expo provides developer tooling that makes developing apps easier, such as file-based routing, a standard library of native modules, and much more.
-
-Expo's Framework is free and open source, with an active community on [GitHub](https://github.com/expo) and [Discord](https://chat.expo.dev). The Expo team works in close collaboration with the React Native team at Meta to bring the latest React Native features to the Expo SDK.
-
-The team at Expo also provides Expo Application Services (EAS), an optional set of services that complements Expo, the Framework, in each step of the development process.
-
-To create a new Expo project, run the following in your terminal:
-
-```shell
-npx create-expo-app@latest
-```
-
-Once you’ve created your app, check out the rest of Expo’s getting started guide to start developing your app.
-
-<BoxLink href="https://docs.expo.dev/get-started/set-up-your-environment">Continue with Expo</BoxLink>
